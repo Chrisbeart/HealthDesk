@@ -34,31 +34,31 @@ body {
 
 @keyframes wave-1 {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  100% { transform: translateX(-100%); }
 }
 
 @keyframes wave-2 {
-  0% { transform: translateX(50%); }
+  0% { transform: translateX(100%); }
   100% { transform: translateX(0); }
 }
 
 @keyframes wave-3 {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
 }
 
 @keyframes wave-4 {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-@keyframes wave-5 {
-  0% { transform: translateX(50%); }
+  0% { transform: translateX(100%); }
   100% { transform: translateX(0); }
 }
 
+@keyframes wave-5 {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
 @keyframes wave-6 {
-  0% { transform: translateX(-50%); }
+  0% { transform: translateX(100%); }
   100% { transform: translateX(0); }
 }
 
