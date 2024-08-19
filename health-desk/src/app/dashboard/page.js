@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import WaveBackground from '../components/backgrounds/WaveBackground';
 
 const Dashboard = () => {
   const schedule = [

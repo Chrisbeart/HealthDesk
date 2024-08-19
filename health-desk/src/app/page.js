@@ -1,13 +1,18 @@
+import Navbar from './components/navbar/Navbar'; // Aktualisierter Pfad
 import WaveBackground from './components/backgrounds/WaveBackground';
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-gray-100">
-      {/* Hintergrund hinzufügen */}
-      <WaveBackground />
+    <div className="relative w-full h-screen flex">
+      {/* Navbar hinzufügen */}
 
-      {/* Zentrale Überschrift */}
-      <h1 className="text-6xl font-bold text-gray-900 z-10">Health Desk</h1>
-    </main>
+      <div className="flex flex-col flex-1 items-center justify-center bg-gray-100 overflow-hidden">
+        {/* Hintergrund hinzufügen */}
+        <WaveBackground />
+
+        {/* Zentrale Überschrift */}
+        <h1 className="text-6xl font-bold text-gray-900 z-10">Health Desk</h1>
+      </div>
+    </div>
   );
 }
