@@ -4,7 +4,7 @@ import Persönliches from './Persönliches';
 import Qualifikationen from './Qualifikationen';
 import Kontakt from './Kontakt';
 
-export default function Mitarbeiterprofil({ employee }) {
+export default function mitarbeiterprofil({ employee }) {
   const renderTabContent = (tab) => {
     switch (tab) {
       case 'Persönliches':

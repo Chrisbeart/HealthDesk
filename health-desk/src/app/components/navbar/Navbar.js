@@ -9,9 +9,9 @@ const Navbar = ({ currentPath }) => {
   const menuItems = [
     { to: "/dashboard", icon: <CiHome className='w-6 h-6' />, name: "Home" },
     { to: "/patientenliste", icon: <CiSearch className='w-6 h-6' />, name: "Search" },
-    { to: "/Mitarbeiterliste", icon: <FaPerson className='w-6 h-6' />, name: "Explore" },
+    { to: "/mitarbeiterliste", icon: <FaPerson className='w-6 h-6' />, name: "Explore" },
     { to: "/message", icon: <FaRegMessage className='w-4 h-4' />, name: "Message" },
-    { to: "/Einstellungen", icon: <IoSettingsOutline className='w-6 h-6' />, name: "Back" },
+    { to: "/einstellungen", icon: <IoSettingsOutline className='w-6 h-6' />, name: "Back" },
   ];
 
   return (

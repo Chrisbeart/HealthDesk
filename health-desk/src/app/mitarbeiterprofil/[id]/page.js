@@ -1,4 +1,4 @@
-import Mitarbeiterprofil from './Mitarbeiterprofil';
+import Mitarbeiterprofil from "./Mitarbeiterprofil";
 
 export default function MitarbeiterPage({ params }) {
   const { id } = params;
