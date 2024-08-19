@@ -3,7 +3,7 @@ import React from 'react';
 const WaveBackground = () => {
   return (
     <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-      <div className="relative w-[220vw] h-full">
+      <div className="relative w-full h-full">
         <WaveSVG
           className="absolute bottom-0 w-full h-full animate-wave-1"
           pathData="M0,160L80,176C160,192,320,224,480,202.7C640,181,800,107,960,112C1120,117,1280,203,1360,245.3L1440,288L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
