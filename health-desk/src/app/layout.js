@@ -1,6 +1,6 @@
-import Navbar from './components/navbar/Navbar';
+import Navbar from './components/Navbar';
 import './globals.css';
-import WaveBackground from './components/backgrounds/WaveBackground';
+import WaveBackground from './components/WaveBackground';
 
 export default function RootLayout({ children }) {
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
