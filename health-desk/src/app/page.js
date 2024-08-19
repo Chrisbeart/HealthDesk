@@ -1,4 +1,4 @@
-import WaveBackground from './components/backgrounds/WaveBackground';
+import WaveBackground from "./components/WaveBackground";
 
 export default function Home() {
   return (
