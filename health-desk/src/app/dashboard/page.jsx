@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import WaveBackground from '../components/backgrounds/WaveBackground';
+import WaveBackground from '../components/WaveBackground';
 
 const Dashboard = () => {
   const schedule = [
@@ -33,7 +33,7 @@ const Dashboard = () => {
       data-aos-once="true">
       
       <div className="flex w-full h-full px-8 my-6 justify-start">
-        <Link href="/Mitarbeiterprofil/1">
+        <Link href="/mitarbeiterprofil/1">
           <h1 className="text-5xl font-fjalla tracking-wide hover:cursor-pointer hover:text-custom-dark-gray z-20">
             Albert Doluk
           </h1>
