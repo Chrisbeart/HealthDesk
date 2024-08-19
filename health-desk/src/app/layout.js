@@ -1,6 +1,9 @@
+"use client"
+import store from './aufnahme/state/store';
 import Navbar from './components/Navbar';
 import './globals.css';
 import WaveBackground from './components/WaveBackground';
+import { Provider } from 'react-redux';
 
 export default function RootLayout({ children }) {
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
@@ -16,7 +19,9 @@ export default function RootLayout({ children }) {
 
         {/* Hauptinhalt */}
         <main className="flex-1 relative z-10">
-          {children}
+          <Provider store={store}>
+            {children}
+          </Provider>
         </main>
       </body>
     </html>
