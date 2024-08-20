@@ -1,21 +1,46 @@
-// app/api/savePatient/route.js
 import { NextResponse } from 'next/server';
-import { connectToDatabase } from '@/database/MongoDB/db';
+import { getMySQLConnection } from '../../../database/MySQL/db';
 
 export async function POST(request) {
   try {
-    const { db } = await connectToDatabase();
-    const data = await request.json();
+    const body = await request.json();
 
-    console.log("Received data:", data);
+    const {
+      vorname,
+      nachname,
+      geburtsdatum,
+      geschlecht,
+      nationalitaet,
+      adresse,
+      plz,
+      stadt,
+      land,
+      telefon,
+      email,
+      versicherungsnummer,
+      notfallkontakt,
+      notfalltelefon,
+      zimmernummer
+    } = body;
 
-    const result = await db.collection('patients').insertOne(data);
+    const connection = await getMySQLConnection();
 
-    console.log("Data successfully saved:", result);
+    const query = `
+      INSERT INTO patients 
+      (vorname, nachname, geburtsdatum, geschlecht, nationalitaet, adresse, plz, stadt, land, telefon, email, versicherungsnummer, notfallkontakt, notfalltelefon, zimmernummer) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
 
-    return NextResponse.json({ message: 'Patient data saved successfully!', result }, { status: 201 });
+    const values = [vorname, nachname, geburtsdatum, geschlecht, nationalitaet, adresse, plz, stadt, land, telefon, email, versicherungsnummer, notfallkontakt, notfalltelefon, zimmernummer];
+
+    const [result] = await connection.query(query, values);
+    const patientId = result.insertId;
+
+    await connection.end();
+
+    return NextResponse.json({ message: 'Patient erfolgreich gespeichert', patientId }, { status: 201 });
   } catch (error) {
-    console.error('Error saving patient data:', error);
-    return NextResponse.json({ message: 'Failed to save patient data.' }, { status: 500 });
+    console.error('Fehler beim Speichern des Patienten:', error);
+    return NextResponse.json({ message: 'Fehler beim Speichern des Patienten', error: error.message }, { status: 500 });
   }
 }
