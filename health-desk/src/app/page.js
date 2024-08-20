@@ -2,7 +2,7 @@ import WaveBackground from "./components/WaveBackground";
 
 export default function Home() {
   return (
-    <div className="relative w-full h-screen flex">
+    <div className="relative w-full h-full flex">
       {/* Navbar hinzufügen */}
 
       <div className="flex flex-col flex-1 items-center justify-center bg-gray-100 overflow-hidden">

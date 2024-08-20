@@ -1,35 +1,94 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+"use client";
 
-const patients = [
-  { id: 1, name: 'Max Mustermann', room: '030', birthYear: 1934, notes: '', tasksCompleted: 7 },
-  { id: 2, name: 'Anna Müller', room: '028', birthYear: 1935, notes: 'Anna Müller ist auffällig reich, sie hat jedoch vergessen, dass sie Enkel hat, vielleicht sollte ich sie daran erinnern', tasksCompleted: 3 },
-  { id: 3, name: 'John Doe', room: '029', birthYear: 1940, notes: 'John Doe needs regular check-ups.', tasksCompleted: 5 },
-  { id: 4, name: 'Jane Smith', room: '031', birthYear: 1945, notes: 'Jane Smith requires special dietary meals.', tasksCompleted: 8 },
-  { id: 5, name: 'Peter Parker', room: '032', birthYear: 1960, notes: 'Peter Parker has a known allergy to penicillin.', tasksCompleted: 2 },
-  { id: 6, name: 'Bruce Wayne', room: '033', birthYear: 1955, notes: 'Bruce Wayne prefers evening check-ups.', tasksCompleted: 6 },
-  { id: 7, name: 'Clark Kent', room: '034', birthYear: 1952, notes: 'Clark Kent needs regular eye check-ups.', tasksCompleted: 8 },
-  { id: 8, name: 'Diana Prince', room: '035', birthYear: 1970, notes: 'Diana Prince is scheduled for a physiotherapy session.', tasksCompleted: 4 },
-  // Add more patients as needed
-];
+import React, { useState, useEffect } from 'react';
+import PatientItem from '../components/PatientItem';
+import { CiFilter, CiCirclePlus } from "react-icons/ci";
+import { Link } from 'next/link';
 
-const PatientDetails = () => {
-  const { id } = useParams();
-  const patient = patients.find((p) => p.id === parseInt(id));
-
-  if (!patient) {
-    return <div>Patient not found</div>;
-  }
-
+const PatientItemSkeleton = () => {
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-4">Patient Details: {patient.name}</h1>
-      <p><strong>Room:</strong> {patient.room}</p>
-      <p><strong>Birth Year:</strong> {patient.birthYear}</p>
-      <p><strong>Notes:</strong> {patient.notes}</p>
-      <p><strong>Tasks Completed:</strong> {patient.tasksCompleted}</p>
+    <div className="p-4 bg-gray-200 rounded-lg shadow animate-pulse">
+      <div className="h-6 bg-gray-300 rounded w-1/2 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/3 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/4 mb-2"></div>
+      <div className="h-4 bg-gray-300 rounded w-1/2"></div>
     </div>
   );
 };
 
-export default PatientDetails;
+const PatientenListe = () => {
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://18.196.77.116:3001/patients')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setPatients(data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error fetching patient data:', error);
+        setError(error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto p-6">
+        <ul className="space-y-4">
+          {Array.from({ length: 5 }).map((_, index) => (
+            <PatientItemSkeleton key={index} />
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>Error fetching patient data: {error.message}</div>;
+  }
+
+  return (
+    <div className="z-20 p-6 pb-20 h-screen flex flex-col rounded-xl overflow-y-auto custom-scrollbar-container custom-scrollbar bg-opacity-80">
+      <div className="flex w-full h-32 justify-between items-center">
+        <h1 className="text-6xl tracking-wide mb-4 font-fjalla">Patientenliste</h1>
+        <div className="flex w-full justify-end p-4">
+          <div className="flex w-72 h-8 m-4 bg-custom-light drop-shadow-xl rounded-xl items-center hover:cursor-pointer">
+            <input type="text" placeholder="Suchen..." className="text-gray-500 p-2 w-full rounded-xl" />
+          </div>
+          <div className="flex m-4">
+            <button>
+              <CiFilter className='w-6 h-6 opacity-40 transition transform hover:opacity-70 duration-200' />
+            </button>
+          </div>
+          <div className="flex">
+            <Link href="/step1" className='flex m-4'>
+              <button>
+                <CiCirclePlus className='w-6 h-6 opacity-40 transition transform hover:opacity-70 duration-200' />
+              </button>
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div className="space-y-4">
+        {patients.map((patient) => (
+          <PatientItem key={patient.id} patient={patient} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default PatientenListe;
