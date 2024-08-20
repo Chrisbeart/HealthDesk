@@ -4,8 +4,20 @@ import MitarbeiterItem from '../components/Mitarbeiteritem';
 import { CiFilter, CiCirclePlus } from "react-icons/ci";
 import Link from 'next/link';
 
+const MitarbeiterItemSkeleton = () => {
+  return (
+    <div className="p-4 bg-gray-200 rounded-xl animate-pulse">
+      <div className="h-8 bg-gray-300 rounded w-3/4 mb-2"></div>
+      <div className="h-6 bg-gray-300 rounded w-1/2 mb-2"></div>
+      <div className="h-6 bg-gray-300 rounded w-1/4 mb-2"></div>
+      <div className="h-6 bg-gray-300 rounded w-1/3"></div>
+    </div>
+  );
+};
+
 const MitarbeiterListe = () => {
   const [mitarbeiter, setMitarbeiter] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch('./employeeData.json')
@@ -22,11 +34,12 @@ const MitarbeiterListe = () => {
           console.error('Fetched data is not an array:', data);
         }
       })
-      .catch(error => console.error('Error fetching employee data:', error));
+      .catch(error => console.error('Error fetching employee data:', error))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
-    <div className="z-20 p-6 pb-20 h-screen flex flex-col rounded-xl overflow-y-auto custom-scrollbar-container custom-scrollbar bg-opacity-80" 
+    <div className="z-20 p-6 pb-20 h-screen w-screen flex flex-col rounded-xl overflow-y-auto custom-scrollbar-container custom-scrollbar bg-opacity-80" 
       data-aos="fade-zoom-in"
       data-aos-easing="ease-in-out"
       data-aos-duration="1000"
@@ -53,9 +66,15 @@ const MitarbeiterListe = () => {
         </div>
       </div>
       <div className="space-y-4">
-        {mitarbeiter.map((employee) => (
-          <MitarbeiterItem key={employee.id} employee={employee} />
-        ))}
+        {loading ? (
+          Array.from({ length: 5 }).map((_, index) => (
+            <MitarbeiterItemSkeleton key={index} />
+          ))
+        ) : (
+          mitarbeiter.map((employee) => (
+            <MitarbeiterItem key={employee.id} employee={employee} />
+          ))
+        )}
       </div>
     </div>
   );
