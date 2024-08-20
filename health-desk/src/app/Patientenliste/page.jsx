@@ -1,35 +1,57 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+"use client";
 
-const patients = [
-  { id: 1, name: 'Max Mustermann', room: '030', birthYear: 1934, notes: '', tasksCompleted: 7 },
-  { id: 2, name: 'Anna Müller', room: '028', birthYear: 1935, notes: 'Anna Müller ist auffällig reich, sie hat jedoch vergessen, dass sie Enkel hat, vielleicht sollte ich sie daran erinnern', tasksCompleted: 3 },
-  { id: 3, name: 'John Doe', room: '029', birthYear: 1940, notes: 'John Doe needs regular check-ups.', tasksCompleted: 5 },
-  { id: 4, name: 'Jane Smith', room: '031', birthYear: 1945, notes: 'Jane Smith requires special dietary meals.', tasksCompleted: 8 },
-  { id: 5, name: 'Peter Parker', room: '032', birthYear: 1960, notes: 'Peter Parker has a known allergy to penicillin.', tasksCompleted: 2 },
-  { id: 6, name: 'Bruce Wayne', room: '033', birthYear: 1955, notes: 'Bruce Wayne prefers evening check-ups.', tasksCompleted: 6 },
-  { id: 7, name: 'Clark Kent', room: '034', birthYear: 1952, notes: 'Clark Kent needs regular eye check-ups.', tasksCompleted: 8 },
-  { id: 8, name: 'Diana Prince', room: '035', birthYear: 1970, notes: 'Diana Prince is scheduled for a physiotherapy session.', tasksCompleted: 4 },
-  // Add more patients as needed
-];
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation'; // Verwende useRouter für die Navigation
 
-const PatientDetails = () => {
-  const { id } = useParams();
-  const patient = patients.find((p) => p.id === parseInt(id));
+const PatientenListe = () => {
+  const [patients, setPatients] = useState([]);
+  const router = useRouter();
 
-  if (!patient) {
-    return <div>Patient not found</div>;
-  }
+  useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const response = await axios.get('/api/getPatients');
+        setPatients(response.data);
+      } catch (error) {
+        console.error('Fehler beim Abrufen der Patientendaten:', error);
+      }
+    };
+
+    fetchPatients();
+  }, []);
+
+  const handleAddPatient = () => {
+    router.push('/aufnahme'); // Navigiere zur Seite /aufnahme
+  };
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-4">Patient Details: {patient.name}</h1>
-      <p><strong>Room:</strong> {patient.room}</p>
-      <p><strong>Birth Year:</strong> {patient.birthYear}</p>
-      <p><strong>Notes:</strong> {patient.notes}</p>
-      <p><strong>Tasks Completed:</strong> {patient.tasksCompleted}</p>
+    <div className="container mx-auto p-6 relative">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-3xl font-bold">Patientenliste</h1>
+        <button 
+          onClick={handleAddPatient} 
+          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full"
+        >
+          +
+        </button>
+      </div>
+      <ul className="space-y-4">
+        {patients.map((patient) => (
+          <li key={patient._id} className="p-4 bg-gray-200 rounded-lg shadow text-black">
+            <h2 className="text-xl font-semibold">{patient.vorname} {patient.nachname}</h2>
+            <p>Geburtsdatum: {patient.geburtsdatum}</p>
+            <p>Geschlecht: {patient.geschlecht}</p>
+            <p>Adresse: {patient.adresse}</p>
+            <p>Stadt: {patient.stadt}</p>
+            <p>Telefon: {patient.telefon}</p>
+            <p>Email: {patient.email}</p>
+            <p>Versicherungsnummer: {patient.versicherungsnummer}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default PatientDetails;
+export default PatientenListe;

@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react';
 
 const Einstellungen = () => {
@@ -51,7 +52,7 @@ const Einstellungen = () => {
   };
 
   return (
-    <div className="p-6 pb-20 h-screen flex flex-col rounded-xl overflow-y-auto bg-opacity-80 custom-scrollbar-container custom-scrollbar" 
+    <div className="p-6 pb-20 h-screen flex flex-col rounded-xl overflow-y-auto bg-opacity-80 custom-scrollbar-container custom-scrollbar text-black" 
       data-aos="fade-zoom-in"
       data-aos-easing="ease-in-out"
       data-aos-duration="1000"

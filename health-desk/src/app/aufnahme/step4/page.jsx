@@ -26,7 +26,7 @@ const Step4 = () => {
       }}
     >
       {() => (
-        <Form className="flex flex-col w-full h-full z-20">
+        <Form className="flex flex-col w-full h-full z-20 text-black">
           <div className="flex h-[15%] justify-between items-center">
             <div className="flex p-10 py-16">
               <h2 className="text-4xl font-fjalla p-6">
