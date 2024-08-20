@@ -1,31 +1,33 @@
 import authService from '../services/authService.js';
 
-export const signUp = async (req, res) => {
+export const signUp = async (req) => {
   try {
     console.log('Received Request Body for signUp:', req.body);
     const { username, password } = req.body;
 
     if (!username || !password) {
       console.log('Validation Error: Username and password are required');
-      return res.status(400).json({ error: 'Username and password are required' });
+      return { error: 'Username and password are required', status: 400 };
     }
 
     const result = await authService.signUp(username, password);
 
     console.log('SignUp successful, returning result:', result);
-    
-    // Anstatt auf `status` zuzugreifen, returniere direkt das Ergebnis
     return res.status(200).json(result);
   } catch (error) {
     console.error('SignUp Error:', error);
 
     if (error.code === 'UsernameExistsException') {
-      return res.status(409).json({ error: 'An account with the given email already exists.' });
+      return { error: 'An account with the given email already exists.', status: 409 };
     }
 
-    return res.status(500).json({ error: error.message });
+    return { error: error.message, status: 500 };
   }
 };
+
+// Die anderen Funktionen bleiben unverändert.
+
+
 
 
 

@@ -1,9 +1,7 @@
-import fs from 'fs';
-import path from 'path';
-import { getMySQLConnection } from './db';
-import dotenv from 'dotenv';
-
-dotenv.config();
+const fs = require('fs');
+const path = require('path');
+const { getMySQLConnection } = require('./db');
+require('dotenv').config();
 
 async function setupDatabase() {
     const connection = await getMySQLConnection();

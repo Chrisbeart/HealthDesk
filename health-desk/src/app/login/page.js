@@ -22,14 +22,14 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/signin', {
+      const response = await axios.post('/api/signin', {
         username: form.email,
         password: form.password,
       });
       console.log(response.data);
       alert('Anmeldung erfolgreich!');
 
-      const userAttributesResponse = await axios.get('/api/auth/userAttributes');
+      const userAttributesResponse = await axios.get('/api/userAttributes');
       const userAttributes = userAttributesResponse.data;
 
       router.push('/mitarbeiterprofil', { query: { ...userAttributes } });

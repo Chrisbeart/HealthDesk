@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation'; // Verwende `next/navigation` anstelle von `next/router`
+import { useRouter } from 'next/navigation';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -18,7 +18,7 @@ const Register = () => {
     specialChar: false,
   });
 
-  const router = useRouter();  // Verwende `useRouter` aus `next/navigation`
+  const router = useRouter();
 
   const validatePassword = (password) => {
     setPasswordRequirements({
@@ -45,32 +45,24 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (!form.email) {
-        alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
-        return;
-      }
+        if (!form.email) {
+            alert('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+            return;
+        }
 
-      console.log('Sending SignUp Request:', { email: form.email, password: form.password });
-      
-      const response = await axios.post('/api/signup', {
-        username: form.email,
-        password: form.password,
-      });
-    
-      console.log('SignUp Response:', response.data);
-      alert('Registrierung erfolgreich! Sie können sich nun anmelden.');
-      router.push('/confirm');
+        const response = await axios.post('/api/signup', {
+            username: form.email,
+            password: form.password,
+        });
+
+        console.log(response.data);
+        alert('Registrierung erfolgreich! Sie können sich nun anmelden.');
+        router.push('/confirm');
     } catch (error) {
-      console.error('Error during SignUp:', error);
-    
-      if (error.response) {
-        console.error('Error Data:', error.response.data);
-        alert(error.response.data.error || 'Registrierung fehlgeschlagen! Bitte versuchen Sie es erneut.');
-      } else {
-        alert('Netzwerkfehler oder Server nicht erreichbar. Bitte versuchen Sie es später erneut.');
-      }
+        console.error('Error:', error.response?.data || error.message);
+        alert('Registrierung fehlgeschlagen! Bitte versuchen Sie es erneut.');
     }
-  };
+ };
 
   return (
     <div className="min-h-screen flex items-center justify-center z-20">

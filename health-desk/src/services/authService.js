@@ -29,13 +29,12 @@ const signUp = async (email, password) => {
   };
 
   try {
-    console.log('SignUp Params:', params); // Log die Parameter für Debugging
+    console.log('SignUp Params:', params);
     const result = await cognito.signUp(params).promise();
-    console.log('SignUp Result:', result); // Log das Ergebnis für Debugging
-
+    console.log('SignUp Result:', result);
     return result;
   } catch (error) {
-    console.error('SignUp Error:', error); // Fehlerprotokollierung
+    console.error('SignUp Error:', error);
     throw new Error(`Registration failed: ${error.message}`);
   }
 };
