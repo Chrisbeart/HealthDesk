@@ -3,13 +3,13 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
-import { saveStep3Data } from '../state/actions';
+import { saveStep4Data } from '../state/actions';
 
 const initialValues = {
-  currentHealth: '',
-  psychologicalSupport: '',
-  socialSupport: '',
-  spiritualSupport: '',
+  resources: '',
+  supportNetwork: '',
+  copingStrategies: '',
+  previousTherapies: '',
 };
 
 const Step3 = () => {
@@ -21,7 +21,7 @@ const Step3 = () => {
       initialValues={initialValues}
       onSubmit={(values) => {
         const patientId = 1; // Verwende die tatsächliche patientId, die du zuordnen möchtest
-        dispatch(saveStep3Data({ ...values, patientId }));
+        dispatch(saveStep4Data({ ...values, patientId }));
         router.push('/Aufnahme/step4');
       }}
     >
@@ -30,7 +30,7 @@ const Step3 = () => {
           <div className="flex h-[15%] justify-between items-center">
             <div className="flex p-10 py-16">
               <h2 className="text-4xl font-fjalla p-6">
-                Psychosoziale und spirituelle Unterstützung<span className="text-xl"></span>
+                Ressourcen und Unterstützungsnetzwerk<span className="text-xl"></span>
               </h2>
             </div>
           </div>
@@ -38,40 +38,40 @@ const Step3 = () => {
             <div className="flex w-[95%] h-full bg-custom-light-gray bg-opacity-25 rounded-xl p-4 overflow-y-scroll custom-scrollbar">
               <div className="flex flex-col w-full space-y-4">
                 <div className="flex flex-col space-y-2">
-                  <h3 className="text-2xl font-thin">Aktuelle Gesundheit</h3>
+                  <h3 className="text-2xl font-thin">Ressourcen</h3>
                   <Field
-                    name="currentHealth"
-                    placeholder="Beschreiben Sie den aktuellen Gesundheitszustand"
+                    name="resources"
+                    placeholder="Beschreiben Sie die Ressourcen"
                     className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
                     component="textarea"
                     rows="4"
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <h3 className="text-2xl font-thin">Psychologische Unterstützung</h3>
+                  <h3 className="text-2xl font-thin">Unterstützungsnetzwerk</h3>
                   <Field
-                    name="psychologicalSupport"
-                    placeholder="Beschreiben Sie die psychologische Unterstützung"
+                    name="supportNetwork"
+                    placeholder="Beschreiben Sie das Unterstützungsnetzwerk"
                     className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
                     component="textarea"
                     rows="4"
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <h3 className="text-2xl font-thin">Soziale Unterstützung</h3>
+                  <h3 className="text-2xl font-thin">Bewältigungsstrategien</h3>
                   <Field
-                    name="socialSupport"
-                    placeholder="Beschreiben Sie die soziale Unterstützung"
+                    name="copingStrategies"
+                    placeholder="Beschreiben Sie die Bewältigungsstrategien"
                     className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
                     component="textarea"
                     rows="4"
                   />
                 </div>
                 <div className="flex flex-col space-y-2">
-                  <h3 className="text-2xl font-thin">Spirituelle Unterstützung</h3>
+                  <h3 className="text-2xl font-thin">Bisherige Therapien</h3>
                   <Field
-                    name="spiritualSupport"
-                    placeholder="Beschreiben Sie die spirituelle Unterstützung"
+                    name="previousTherapies"
+                    placeholder="Beschreiben Sie die bisherigen Therapien"
                     className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
                     component="textarea"
                     rows="4"

@@ -1,158 +1,161 @@
-"use client"
-import React from 'react';
+"use client";
+
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, FieldArray } from 'formik';
-import { useDispatch } from 'react-redux';
-import { saveStep6Data } from '../state/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { createSelector } from 'reselect';
 
 const initialValues = {
-  goalsAndMeasures: [
-    {
-      name: 'Kurzfristige Ziele',
-      goal: '',
-      measures: '',
-      responsibilities: '',
-      status: ''
-    },
-    {
-      name: 'Langfristige Ziele',
-      goal: '',
-      measures: '',
-      responsibilities: '',
-      status: ''
-    },
-    {
-      name: 'Konkrete Maßnahmen zur Zielerreichung',
-      goal: '',
-      measures: '',
-      responsibilities: '',
-      status: ''
-    },
-    {
-      name: 'Verantwortlichkeiten und Zuständigkeiten',
-      goal: '',
-      measures: '',
-      responsibilities: '',
-      status: ''
-    }
-  ]
+  evaluation: [
+    { name: 'Regelmäßige Überprüfung der Pflegeplanung', responsible: '', frequency: '', notes: '' },
+    { name: 'Anpassungen basierend auf aktuellen Bedürfnissen und Veränderungen', responsible: '', frequency: '', notes: '' },
+  ],
+  nurse: '',
+  management: '',
 };
 
-const responsibilityOptions = ['Pflegekraft', 'Arzt', 'Angehörige', 'Patient'];
-const statusOptions = ['In Bearbeitung', 'Abgeschlossen', 'Ausstehend'];
+const frequencyOptions = ['Täglich', 'Wöchentlich', 'Monatlich', 'Vierteljährlich', 'Halbjährlich', 'Jährlich'];
+
+const step1DataSelector = createSelector(
+  (state) => state.step1,
+  (step1) => step1?.data || {}
+);
+
+const step2DataSelector = createSelector(
+  (state) => state.step2,
+  (step2) => step2?.data || {}
+);
+
+const step3DataSelector = createSelector(
+  (state) => state.step3,
+  (step3) => step3?.data || {}
+);
+
+const step4DataSelector = createSelector(
+  (state) => state.step4,
+  (step4) => step4?.data || {}
+);
+
+const step5DataSelector = createSelector(
+  (state) => state.step5,
+  (step5) => step5?.data || {}
+);
+
+const step6DataSelector = createSelector(
+  (state) => state.step6,
+  (step6) => step6?.data || {}
+);
 
 const Step6 = () => {
   const router = useRouter();
+  const [showPopup, setShowPopup] = useState(false);
+
+  const step1Data = useSelector(step1DataSelector);
+  const step2Data = useSelector(step2DataSelector);
+  const step3Data = useSelector(step3DataSelector);
+  const step4Data = useSelector(step4DataSelector);
+  const step5Data = useSelector(step5DataSelector);
+  const step6Data = useSelector(step6DataSelector);
+
   const dispatch = useDispatch();
 
+  const handleSubmit = async (values) => {
+    const completeData = {
+      ...step1Data,
+      ...step2Data,
+      ...step3Data,
+      ...step4Data,
+      ...step5Data,
+      ...step6Data,
+      evaluation: values.evaluation,
+      nurse: values.nurse,
+      management: values.management,
+    };
+
+    try {
+      const response = await axios.post('/api/savePatient', completeData);
+
+      if (response.status === 201) {
+        setShowPopup(true);
+      }
+    } catch (error) {
+      console.error('Fehler beim Speichern der Patientendaten:', error);
+      alert('Es gab ein Problem beim Speichern der Daten. Bitte versuche es erneut.');
+    }
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    router.push('/Patientenliste'); // Navigiere nach Abschluss zur Patientenliste
+  };
+
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        const patientId = 1; // Verwende die tatsächliche patientId, die du zuordnen möchtest
-        dispatch(saveStep6Data({ ...values, patientId }));
-        router.push('/Aufnahme/step7');
-      }}
-    >
-      {() => (
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      {({ values }) => (
         <Form className="flex flex-col w-full h-full z-20 text-black">
-          <div className="flex h-[15%] justify-between items-center">
-            <div className="flex p-10 py-16">
-              <h2 className="text-4xl font-fjalla p-6">
-                Pflegeplanung<span className="text-xl">_Ziele und Maßnahmen</span>
-              </h2>
-            </div>
-          </div>
-          <div className="flex justify-center items-center h-[70%] w-full">
-            <div className="flex w-[95%] h-full bg-custom-light-gray bg-opacity-25 rounded-xl p-4 overflow-y-scroll custom-scrollbar">
-              <FieldArray name="goalsAndMeasures">
-                {({ form, push, remove }) => (
-                  <div className="flex flex-col w-full space-y-4">
-                    <div className="grid grid-cols-5 gap-2 items-center">
-                      <div className="text-xl text-center font-fjalla">Kategorie</div>
-                      <div className="text-xl text-center font-fjalla">Ziele</div>
-                      <div className="text-xl text-center font-fjalla">Maßnahmen</div>
-                      <div className="text-xl text-center font-fjalla">Verantwortlichkeiten</div>
-                      <div className="text-xl text-center font-fjalla">Status</div>
-                    </div>
-                    {form.values.goalsAndMeasures.map((_, index) => (
-                      <div key={index} className="grid grid-cols-5 gap-2 items-center">
-                        <Field
-                          name={`goalsAndMeasures[${index}].name`}
-                          placeholder="Kategorie"
-                          className="drop-shadow-md font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35"
-                          disabled
-                        />
-                        <Field
-                          name={`goalsAndMeasures[${index}].goal`}
-                          placeholder="Ziele"
-                          className="flex justify-center items-center drop-shadow-md pt-4 h-16 font-lato text-md text-left rounded-xl bg-custom-light-gray bg-opacity-35 px-6 w-full"
-                          component="textarea"
-                          rows="4"
-                        />
-                        <Field
-                          name={`goalsAndMeasures[${index}].measures`}
-                          placeholder="Maßnahmen"
-                          className="flex justify-center items-center drop-shadow-md pt-4 h-16 font-lato text-md text-left rounded-xl bg-custom-light-gray bg-opacity-35 px-6 w-full"
-                          component="textarea"
-                          rows="4"
-                        />
-                        <Field as="select" name={`goalsAndMeasures[${index}].responsibilities`} className="drop-shadow-md font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35  w-full">
-                          <option value="">Verantwortlichkeiten</option>
-                          {responsibilityOptions.map((option, i) => (
-                            <option key={i} value={option}>{option}</option>
-                          ))}
-                        </Field>
-                        <Field as="select" name={`goalsAndMeasures[${index}].status`} className="drop-shadow-md font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 w-full">
-                          <option value="">Status</option>
-                          {statusOptions.map((option, i) => (
-                            <option key={i} value={option}>{option}</option>
-                          ))}
-                        </Field>
-                        {index !== form.values.goalsAndMeasures.length - 1 && (
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className=" flex justify-center items-center font-lato semibold text-white bg-opacity-75 text-xl w-16 h-4 rounded-full bg-red-600"
-                          >
-                            -
-                          </button>
-                        )}
-                        {index === form.values.goalsAndMeasures.length - 1 &&
-                          form.values.goalsAndMeasures[index].goal &&
-                          form.values.goalsAndMeasures[index].measures &&
-                          form.values.goalsAndMeasures[index].responsibilities &&
-                          form.values.goalsAndMeasures[index].status && (
-                            <button
-                              type="button"
-                              onClick={() => push({ name: '', goal: '', measures: '', responsibilities: '', status: '' })}
-                              className="font-lato semibold text-white bg-opacity-75 text-md w-24 h-10 rounded-xl bg-custom-dark-gray"
-                            >
-                              +
-                            </button>
-                          )}
-                      </div>
-                    ))}
+          <FieldArray name="evaluation">
+            {({ form }) => (
+              <div className="flex flex-col w-full space-y-6">
+                <div className="grid grid-cols-4 gap-4 items-center">
+                  <div className="text-xl text-center font-fjalla">Kategorie</div>
+                  <div className="text-xl text-center font-fjalla">Verantwortlich</div>
+                  <div className="text-xl text-center font-fjalla">Häufigkeit</div>
+                  <div className="text-xl text-center font-fjalla">Notizen</div>
+                </div>
+                {form.values.evaluation.map((_, index) => (
+                  <div key={index} className="grid grid-cols-4 gap-4 items-center">
+                    <Field
+                      name={`evaluation[${index}].name`}
+                      placeholder="Kategorie"
+                      className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35"
+                      disabled
+                    />
+                    <Field
+                      name={`evaluation[${index}].responsible`}
+                      placeholder="Verantwortlich"
+                      className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35 w-full"
+                    />
+                    <Field as="select" name={`evaluation[${index}].frequency`} className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35 w-full">
+                      <option value="">Wählen Sie die Häufigkeit</option>
+                      {frequencyOptions.map((option, i) => (
+                        <option key={i} value={option}>{option}</option>
+                      ))}
+                    </Field>
+                    <Field
+                      name={`evaluation[${index}].notes`}
+                      placeholder="Geben Sie Notizen ein"
+                      className="flex justify-center items-center drop-shadow-md pt-4 h-16 font-lato text-md text-left rounded-xl bg-custom-light-gray bg-opacity-35 px-6 w-full"
+                      component="textarea"
+                      rows="4"
+                    />
                   </div>
-                )}
-              </FieldArray>
-            </div>
-          </div>
-          <div className="flex justify-between mt-4 px-10">
-            <button
-              type="button"
-              onClick={() => router.back()}
-              className="font-lato semibold text-white bg-opacity-75 text-xl w-32 h-12 rounded-xl bg-custom-dark-gray"
-            >
-              Zurück
-            </button>
+                ))}
+              </div>
+            )}
+          </FieldArray>
+          <div className="flex justify-center mt-4 px-10">
             <button
               type="submit"
               className="font-lato semibold text-white bg-opacity-75 text-xl w-32 h-12 rounded-xl bg-custom-dark-gray"
             >
-              Weiter
+              Daten senden
             </button>
           </div>
+          {showPopup && (
+            <div className="fixed inset-0 flex items-center justify-center text-black bg-gray-500 bg-opacity-75">
+              <div className="bg-white p-8 rounded-lg shadow-lg">
+                <h3 className="text-2xl mb-4">Patient erfolgreich angelegt</h3>
+                <button
+                  onClick={handlePopupClose}
+                  className="font-lato semibold text-black bg-opacity-75 text-xl w-32 h-12 rounded-xl bg-custom-dark-gray"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          )}
         </Form>
       )}
     </Formik>
