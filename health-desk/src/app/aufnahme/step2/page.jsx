@@ -1,42 +1,76 @@
-"use client"
+"use client";
 import React from 'react';
-import { useRouter } from 'next/navigation';
-import { Formik, Form, Field, FieldArray } from 'formik';
-import { useDispatch } from 'react-redux';
-import { saveStep2Data } from '../state/actions';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
 
 const initialValues = {
-  diagnoses: '',
-  medications: [{ name: '', dose: '', frequency: '', duration: '' }],
-  allergies: [{ type: '', details: '', intensity: '', treatment: '' }],
-  importantInfo: '',
-  therapies: ''
+  currentHealth: '',
+  psychologicalSupport: '',
+  socialSupport: '',
+  spiritualSupport: '',
 };
-
-const medicationOptions = ['Medikament A', 'Medikament B', 'Medikament C'];
-const doseOptions = ['1mg', '5mg', '10mg'];
-const frequencyOptions = ['1x täglich', '2x täglich', '3x täglich'];
-const durationOptions = ['1 Woche', '1 Monat', '3 Monate'];
-const allergyOptions = ['Heuschnupfen', 'Hausstaubmilbenallergie', 'Tierallergie', 'Nesselsucht', 'Sonnenallergie', 'Kontaktallergie', 'Schimmelallergie', 'Kreuzallergien', 'Insektengiftallergie', 'Nahrungsmittelallergie', 'Histamin', 'Berufsbedingte Allergien'];
-const animalOptions = ['Katzen', 'Hunde', 'Pferde', 'Nagetiere'];
-const intensityOptions = ['Leicht', 'Mittel', 'Schwer'];
 
 const Step2 = () => {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const searchParams = useSearchParams();
+  const patientId = searchParams.get('patientId');
+
+  const handleSubmit = async (values) => {
+    try {
+      await axios.post('/api/savePsychosocialSupport', { ...values, patientId });
+      router.push(`/Aufnahme/step3?patientId=${patientId}`);
+    } catch (error) {
+      console.error('Fehler beim Speichern der psychosozialen Unterstützung:', error);
+      alert('Es gab ein Problem beim Speichern der Daten. Bitte versuche es erneut.');
+    }
+  };
 
   return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={(values) => {
-        const patientId = 1; // Verwende die tatsächliche patientId, die du zuordnen möchtest
-        dispatch(saveStep2Data({ ...values, patientId }));
-        router.push('/step3');
-      }}
-    >
-      {({ values }) => (
-        <Form className="flex flex-col w-full h-full z-20">
-          {/* Restliche Form-Inhalte */}
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      {() => (
+        <Form className="flex flex-col w-full h-full z-20 text-black">
+          <div className="flex h-[15%] justify-between items-center">
+            <div className="flex p-10 py-16">
+              <h2 className="text-4xl font-fjalla p-6">
+                Psychosoziale Unterstützung<span className="text-xl">_Details</span>
+              </h2>
+            </div>
+          </div>
+          <div className="flex justify-center items-center h-[70%] w-full">
+            <div className="flex w-[95%] h-full bg-custom-light-gray bg-opacity-25 rounded-xl p-4 overflow-y-scroll custom-scrollbar">
+              <div className="flex flex-col w-full space-y-4">
+                <Field
+                  name="currentHealth"
+                  placeholder="Aktuelle Gesundheitszustand"
+                  className="field"
+                  component="textarea"
+                  rows="4"
+                />
+                <Field
+                  name="psychologicalSupport"
+                  placeholder="Psychologische Unterstützung"
+                  className="field"
+                  component="textarea"
+                  rows="4"
+                />
+                <Field
+                  name="socialSupport"
+                  placeholder="Soziale Unterstützung"
+                  className="field"
+                  component="textarea"
+                  rows="4"
+                />
+                <Field
+                  name="spiritualSupport"
+                  placeholder="Spirituelle Unterstützung"
+                  className="field"
+                  component="textarea"
+                  rows="4"
+                />
+              </div>
+            </div>
+          </div>
           <div className="flex justify-between mt-4 px-10">
             <button
               type="button"

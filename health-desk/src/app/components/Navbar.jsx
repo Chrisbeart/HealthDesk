@@ -7,15 +7,15 @@ import Link from 'next/link';
 
 const Navbar = ({ currentPath }) => {
   const menuItems = [
-    { to: "/dashboard", icon: <CiHome className='w-6 h-6' />, name: "Home" },
-    { to: "/patientenliste", icon: <CiSearch className='w-6 h-6' />, name: "Search" },
-    { to: "/mitarbeiterliste", icon: <FaPerson className='w-6 h-6' />, name: "Explore" },
-    { to: "/message", icon: <FaRegMessage className='w-4 h-4' />, name: "Message" },
-    { to: "/einstellungen", icon: <IoSettingsOutline className='w-6 h-6' />, name: "Back" },
+    { to: "/Dashboard", icon: <CiHome className='w-6 h-6' />, name: "Home" },
+    { to: "/Patientenliste", icon: <CiSearch className='w-6 h-6' />, name: "Search" },
+    { to: "/Mitarbeiterliste", icon: <FaPerson className='w-6 h-6' />, name: "Explore" },
+    { to: "/Message", icon: <FaRegMessage className='w-4 h-4' />, name: "Message" },
+    { to: "/Einstellungen", icon: <IoSettingsOutline className='w-6 h-6' />, name: "Back" },
   ];
 
   return (
-    <div className="flex flex-col items-center w-16 h-full bg-custom-gray border border-black border-opacity-15 bg-opacity-60 shadow-2xl rounded-2xl relative overflow-visible md:w-auto md:h-auto md:rounded-xl md:bg-opacity-100 md:shadow-none">
+    <div className="flex flex-col items-center w-16 h-full ml-4 my-4 bg-custom-gray border border-black border-opacity-50 bg-opacity-20 shadow-2xl rounded-2xl relative overflow-visible md:w-auto md:h-auto md:rounded-xl md:bg-opacity-60 md:shadow-none">
       <div className="flex justify-between items-center w-full p-4 md:justify-center md:items-start md:pt-6 md:h-32">
         <Link href="/">
           <FaHandHoldingMedical className='fill-custom-dark-gray w-6 h-6 md:w-8 md:h-8' />

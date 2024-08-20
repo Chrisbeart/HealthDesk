@@ -11,16 +11,27 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
+<<<<<<< HEAD
     "amazon-cognito-identity-js": "^6.3.12",
+=======
+    "aos": "^2.3.4",
+>>>>>>> 160b2da5fd315562ee99dc24c11fee1721003340
     "aws-sdk": "^2.1678.0",
     "axios": "^1.7.4",
     "dotenv": "^16.4.5",
+    "formik": "^2.4.6",
+    "lil-gui": "^0.19.2",
     "mysql2": "^3.11.0",
     "next": "14.2.5",
     "react": "^18",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-icons": "^5.3.0",
+<<<<<<< HEAD
     "react-redux": "^9.1.2"
+=======
+    "three": "^0.167.1"
+>>>>>>> 160b2da5fd315562ee99dc24c11fee1721003340
   },
   "devDependencies": {
     "eslint": "^8",

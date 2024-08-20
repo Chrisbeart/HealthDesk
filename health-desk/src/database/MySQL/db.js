@@ -1,15 +1,15 @@
 const mysql = require('mysql2/promise');
-const dotenv = require('dotenv');
-
-dotenv.config();
+require('dotenv').config();
 
 async function getMySQLConnection() {
     const connection = await mysql.createConnection({
-        host: process.env.MYSQL_HOST,
-        user: process.env.MYSQL_USER,
-        password: process.env.MYSQL_PASSWORD,
-        database: process.env.MYSQL_DATABASE,
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+        multipleStatements: process.env.DB_MULTIPLE_STATEMENTS === 'true',
+        database: process.env.DB_NAME
     });
+
     return connection;
 }
 
