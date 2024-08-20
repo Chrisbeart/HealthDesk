@@ -4,19 +4,42 @@ import { getMySQLConnection } from '../../../database/MySQL/db';
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { currentHealth, psychologicalSupport, socialSupport, spiritualSupport, patientId } = body;
+    console.log('Empfangene Daten:', body);
 
+    const {
+      patientId,
+      currentHealth,
+      psychologicalSupport,
+      socialSupport,
+      spiritualSupport,
+    } = body;
+
+    // Verbindung zur Datenbank herstellen
     const connection = await getMySQLConnection();
 
+    // SQL-Abfrage zum Einfügen der Daten
     const query = `
-      INSERT INTO psychosocial_support (patientId, currentHealth, psychologicalSupport, socialSupport, spiritualSupport) 
+      INSERT INTO psychosocial_support 
+      (patientId, currentHealth, psychologicalSupport, socialSupport, spiritualSupport) 
       VALUES (?, ?, ?, ?, ?)
     `;
 
-    await connection.query(query, [patientId, currentHealth, psychologicalSupport, socialSupport, spiritualSupport]);
+    const values = [
+      patientId,
+      currentHealth,
+      psychologicalSupport,
+      socialSupport,
+      spiritualSupport
+    ];
 
+    // Ausführung der SQL-Abfrage
+    const [result] = await connection.query(query, values);
+    console.log('Datenbank-Insert-Ergebnis:', result);
+
+    // Verbindung beenden
     await connection.end();
 
+    // Erfolgreiche Antwort
     return NextResponse.json({ message: 'Daten erfolgreich gespeichert' }, { status: 201 });
   } catch (error) {
     console.error('Fehler beim Speichern der Daten:', error);
