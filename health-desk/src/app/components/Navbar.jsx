@@ -15,7 +15,7 @@ const Navbar = ({ currentPath }) => {
   ];
 
   return (
-    <div className="flex flex-col items-center w-16 h-full bg-custom-gray border border-black border-opacity-15 bg-opacity-60 shadow-2xl rounded-2xl relative overflow-visible md:w-auto md:h-auto md:rounded-xl md:bg-opacity-100 md:shadow-none">
+    <div className="flex flex-col items-center w-16 h-full ml-4 my-4 bg-custom-gray border border-black border-opacity-50 bg-opacity-20 shadow-2xl rounded-2xl relative overflow-visible md:w-auto md:h-auto md:rounded-xl md:bg-opacity-60 md:shadow-none">
       <div className="flex justify-between items-center w-full p-4 md:justify-center md:items-start md:pt-6 md:h-32">
         <Link href="/">
           <FaHandHoldingMedical className='fill-custom-dark-gray w-6 h-6 md:w-8 md:h-8' />

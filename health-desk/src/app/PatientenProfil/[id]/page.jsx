@@ -1,3 +1,6 @@
+// Add "use client" to ensure the file is treated as a client-side component
+"use client";
+
 import React from 'react';
 import { useRouter } from 'next/router';
 
@@ -13,8 +16,9 @@ const patients = [
 ];
 
 const PatientDetails = () => {
-  const router = useRouter();
-  const { id } = router.query;
+  const router = useRouter(); // useRouter hook
+  const { id } = router.query; // Extracting id from the query
+
   const patient = patients.find((p) => p.id === parseInt(id));
 
   if (!patient) {
