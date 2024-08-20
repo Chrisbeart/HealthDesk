@@ -6,6 +6,7 @@ import { Formik, Form, Field } from 'formik';
 import { useDispatch } from 'react-redux';
 import { saveStep1Data } from './state/actions';
 
+
 const initialValues = {
   vorname: '',
   nachname: '',

@@ -1,39 +1,60 @@
-// Add "use client" to ensure the file is treated as a client-side component
-"use client";
+"use client"
 
-import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
-const patients = [
-  { id: 1, name: 'Max Mustermann', room: '030', birthYear: 1934, notes: '', tasksCompleted: 7 },
-  { id: 2, name: 'Anna Müller', room: '028', birthYear: 1935, notes: 'Anna Müller ist auffällig reich, sie hat jedoch vergessen, dass sie Enkel hat, vielleicht sollte ich sie daran erinnern', tasksCompleted: 3 },
-  { id: 3, name: 'John Doe', room: '029', birthYear: 1940, notes: 'John Doe needs regular check-ups.', tasksCompleted: 5 },
-  { id: 4, name: 'Jane Smith', room: '031', birthYear: 1945, notes: 'Jane Smith requires special dietary meals.', tasksCompleted: 8 },
-  { id: 5, name: 'Peter Parker', room: '032', birthYear: 1960, notes: 'Peter Parker has a known allergy to penicillin.', tasksCompleted: 2 },
-  { id: 6, name: 'Bruce Wayne', room: '033', birthYear: 1955, notes: 'Bruce Wayne prefers evening check-ups.', tasksCompleted: 6 },
-  { id: 7, name: 'Clark Kent', room: '034', birthYear: 1952, notes: 'Clark Kent needs regular eye check-ups.', tasksCompleted: 8 },
-  { id: 8, name: 'Diana Prince', room: '035', birthYear: 1970, notes: 'Diana Prince is scheduled for a physiotherapy session.', tasksCompleted: 4 },
-];
+const PatientenProfil = () => {
+  const router = useRouter();
+  const query = router.query; // Check if router.query is correctly initialized
 
-const PatientDetails = () => {
-  const router = useRouter(); // useRouter hook
-  const { id } = router.query; // Extracting id from the query
+  const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('Medizinische Informationen');
+  const [subTab, setSubTab] = useState('');
 
-  const patient = patients.find((p) => p.id === parseInt(id));
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      if (!query.id) {
+        setLoading(false);
+        return;
+      }
 
-  if (!patient) {
-    return <div>Patient not found</div>;
+      try {
+        console.log(`Fetching data for patient ID: ${query.id}`); // Debug log
+
+        const response = await fetch(`/api/getPatient?patientId=${query.id}`);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch patient data: ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        if (data.patient) {
+          setPatient(data.patient);
+        } else {
+          setError('Patient not found');
+        }
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching patient data:', error);
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchPatientData();
+  }, [query.id]);
+
+  if (loading) {
+    return <div>Loading patient data...</div>;
   }
 
-  return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mb-4">Patient Details: {patient.name}</h1>
-      <p><strong>Room:</strong> {patient.room}</p>
-      <p><strong>Birth Year:</strong> {patient.birthYear}</p>
-      <p><strong>Notes:</strong> {patient.notes}</p>
-      <p><strong>Tasks Completed:</strong> {patient.tasksCompleted}</p>
-    </div>
-  );
-};
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
-export default PatientDetails;
+  if (!patient) {
+    return <div>No patient data found</div>;
+  }
+
+  // Render the rest of your component
+};
