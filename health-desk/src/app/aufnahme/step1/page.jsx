@@ -1,5 +1,4 @@
-"use client";  // Dies ist notwendig, um sicherzustellen, dass es sich um eine Client-Komponente handelt
-
+"use client"
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field } from 'formik';
@@ -25,7 +24,7 @@ const initialValues = {
 };
 
 const Step1 = () => {
-  const router = useRouter();
+  const router = useRouter(); // Verwende useRouter
   const dispatch = useDispatch();
 
   return (
@@ -33,12 +32,41 @@ const Step1 = () => {
       initialValues={initialValues}
       onSubmit={(values) => {
         dispatch(saveStep1Data(values));
-        router.push('/aufnahme/step2');
+        router.push('/aufnahme/step2');  // Navigiere zu Step2 nach Einreichung des Formulars
       }}
     >
       {() => (
         <Form className="flex flex-col w-full h-full z-20">
-          {/* Form-Inhalte */}
+          <div className="flex h-[15%] justify-between items-center">
+            <div className="flex p-10 py-16">
+              <h2 className="text-4xl font-fjalla p-6">
+                Stammdaten<span className="text-xl">_Patient</span>
+              </h2>
+            </div>
+          </div>
+          <div className="flex justify-center items-center h-[70%] w-full">
+            <div className="flex w-[95%] h-full bg-custom-light-gray bg-opacity-25 rounded-xl p-4 overflow-y-scroll custom-scrollbar">
+              <div className="flex flex-col w-full space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Field name="vorname" placeholder="Vorname" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="nachname" placeholder="Nachname" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="geburtsdatum" placeholder="Geburtsdatum" type="date" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="geschlecht" placeholder="Geschlecht" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="nationalitaet" placeholder="Nationalität" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="adresse" placeholder="Adresse" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="plz" placeholder="PLZ" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="stadt" placeholder="Stadt" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="land" placeholder="Land" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="telefon" placeholder="Telefon" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="email" placeholder="Email" type="email" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="versicherungsnummer" placeholder="Versicherungsnummer" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="notfallkontakt" placeholder="Notfallkontakt" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="notfalltelefon" placeholder="Notfalltelefon" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                  <Field name="zimmernummer" placeholder="Zimmernummer" className="p-4 rounded-xl bg-custom-light-gray bg-opacity-35" />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="flex justify-between mt-4 px-10">
             <button
               type="submit"

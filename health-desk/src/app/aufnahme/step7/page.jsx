@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Formik, Form, Field, FieldArray } from 'formik';
@@ -14,6 +15,9 @@ const initialValues = {
   nurse: '',
   management: '',
 };
+
+// Definiere die `frequencyOptions`-Variable
+const frequencyOptions = ['Täglich', 'Wöchentlich', 'Monatlich', 'Vierteljährlich', 'Halbjährlich', 'Jährlich'];
 
 // Selektoren für die Daten der vorherigen Schritte
 const step1DataSelector = createSelector(
@@ -35,25 +39,31 @@ const Step7 = () => {
 
   const dispatch = useDispatch();
 
-  const handleSubmit = (values) => {
+  // Markiere die handleSubmit-Funktion als async
+  const handleSubmit = async (values) => {
     const completeData = {
       ...step1Data,
       ...step2Data,
+      // Füge hier die restlichen Step-Daten hinzu
       evaluation: values.evaluation,
       nurse: values.nurse,
       management: values.management,
-      patientId: step1Data.patientId, 
+      patientId: step1Data.patientId, // Assuming patientId is part of step1Data or another step's data
     };
-
-    axios.post('http://your-api-url/step7', completeData)
-      .then(response => {
+  
+    try {
+      const response = await axios.post('/api/savePatient', completeData);
+  
+      if (response.status === 201) {
         setShowPopup(true);
-      })
-      .catch(error => {
-        console.error('Fehler beim Speichern der Patientendaten:', error);
-      });
+      }
+    } catch (error) {
+      console.error('Fehler beim Speichern der Patientendaten:', error);
+      alert('Es gab ein Problem beim Speichern der Daten. Bitte versuche es erneut.');
+    }
   };
-
+  
+  
   const handlePopupClose = () => {
     setShowPopup(false);
     router.push('/patientenliste');  // Navigiere nach Abschluss zur Patientenliste
@@ -63,7 +73,46 @@ const Step7 = () => {
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ values }) => (
         <Form className="flex flex-col w-full h-full z-20">
-          {/* Form Inhalt */}
+          <FieldArray name="evaluation">
+            {({ form }) => (
+              <div className="flex flex-col w-full space-y-6">
+                <div className="grid grid-cols-4 gap-4 items-center">
+                  <div className="text-xl text-center font-fjalla">Kategorie</div>
+                  <div className="text-xl text-center font-fjalla">Verantwortlich</div>
+                  <div className="text-xl text-center font-fjalla">Häufigkeit</div>
+                  <div className="text-xl text-center font-fjalla">Notizen</div>
+                </div>
+                {form.values.evaluation.map((_, index) => (
+                  <div key={index} className={`grid grid-cols-4 gap-4 items-center`}>
+                    <Field
+                      name={`evaluation[${index}].name`}
+                      placeholder="Kategorie"
+                      className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35"
+                      disabled
+                    />
+                    <Field
+                      name={`evaluation[${index}].responsible`}
+                      placeholder="Verantwortlich"
+                      className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35 w-full"
+                    />
+                    <Field as="select" name={`evaluation[${index}].frequency`} className="drop-shadow-md font-lato text-md text-center p-4 rounded-xl bg-custom-light-gray bg-opacity-35 w-full">
+                      <option value="">Wählen Sie die Häufigkeit</option>
+                      {frequencyOptions.map((option, i) => (
+                        <option key={i} value={option}>{option}</option>
+                      ))}
+                    </Field>
+                    <Field
+                      name={`evaluation[${index}].notes`}
+                      placeholder="Geben Sie Notizen ein"
+                      className="flex justify-center items-center drop-shadow-md pt-4 h-16 font-lato text-md text-left rounded-xl bg-custom-light-gray bg-opacity-35 px-6 w-full"
+                      component="textarea"
+                      rows="4"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </FieldArray>
           <div className="flex justify-center mt-4 px-10">
             <button
               type="submit"

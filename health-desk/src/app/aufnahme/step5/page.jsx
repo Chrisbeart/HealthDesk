@@ -22,12 +22,64 @@ const Step5 = () => {
       onSubmit={(values) => {
         const patientId = 1; // Verwende die tatsächliche patientId, die du zuordnen möchtest
         dispatch(saveStep5Data({ ...values, patientId }));
-        router.push('/step6');
+        router.push('/aufnahme/step6');
       }}
     >
       {() => (
         <Form className="flex flex-col w-full h-full z-20">
-          {/* Restliche Form-Inhalte */}
+          <div className="flex h-[15%] justify-between items-center">
+            <div className="flex p-10 py-16">
+              <h2 className="text-4xl font-fjalla p-6">
+                Alltagsaktivitäten und Lebensstil<span className="text-xl"></span>
+              </h2>
+            </div>
+          </div>
+          <div className="flex justify-center items-center h-[70%] w-full">
+            <div className="flex w-[95%] h-full bg-custom-light-gray bg-opacity-25 rounded-xl p-4 overflow-y-scroll custom-scrollbar">
+              <div className="flex flex-col w-full space-y-4">
+                <div className="flex flex-col space-y-2">
+                  <h3 className="text-2xl font-thin">Tagesablauf</h3>
+                  <Field
+                    name="dailyRoutine"
+                    placeholder="Beschreiben Sie den Tagesablauf"
+                    className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
+                    component="textarea"
+                    rows="4"
+                  />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <h3 className="text-2xl font-thin">Ernährung</h3>
+                  <Field
+                    name="nutrition"
+                    placeholder="Beschreiben Sie die Ernährung"
+                    className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
+                    component="textarea"
+                    rows="4"
+                  />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <h3 className="text-2xl font-thin">Körperliche Aktivität</h3>
+                  <Field
+                    name="physicalActivity"
+                    placeholder="Beschreiben Sie die körperliche Aktivität"
+                    className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
+                    component="textarea"
+                    rows="4"
+                  />
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <h3 className="text-2xl font-thin">Schlafmuster</h3>
+                  <Field
+                    name="sleepPattern"
+                    placeholder="Beschreiben Sie das Schlafmuster"
+                    className="font-lato text-md text-center p-4 mx-4 rounded-xl bg-custom-light-gray bg-opacity-35 drop-shadow-xl w-full"
+                    component="textarea"
+                    rows="4"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="flex justify-between mt-4 px-10">
             <button
               type="button"
