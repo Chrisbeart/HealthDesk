@@ -10,7 +10,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className="relative flex">
+      <body className="relative flex w-full h-full max-h-screen overflow-hidden">
         {/* Hintergrund hinzufügen */}
         <WaveBackground />
         
@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
         <Navbar currentPath={currentPath} />
 
         {/* Hauptinhalt */}
-        <main className="flex-1 relative z-10">
+        <main className="flex w-full h-full max-h-screen overflow-hidden relative z-10">
           <Provider store={store}>
             {children}
           </Provider>

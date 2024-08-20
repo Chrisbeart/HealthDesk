@@ -26,7 +26,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full h-full px-6 py-12 justify-center items-center rounded-xl z-20"
+    <div className="flex flex-col w-full max-h-[95vh] px-6   justify-center items-center rounded-xl z-20"
       data-aos="fade-zoom-in"
       data-aos-easing="ease-in-out"
       data-aos-duration="1000"
@@ -34,13 +34,13 @@ const Dashboard = () => {
       
       <div className="flex w-full h-full px-8 my-6 justify-start">
         <Link href="/Mitarbeiterprofil/1">
-          <h1 className="text-5xl font-fjalla tracking-wide hover:cursor-pointer hover:text-custom-dark-gray z-20">
+          <h1 className="text-5xl font-fjalla bg-custom-dark-gray bg-opacity-15 p-2 px-6 rounded-xl  tracking-wide hover:cursor-pointer hover:text-custom-dark-gray z-20">
             Albert Doluk
           </h1>
         </Link>
       </div>
 
-        <div className="flex w-full h-full">
+        <div className="flex w-full h-screen">
           <div className="flex flex-col w-[40%] h-[93%] bg-custom-light-gray bg-opacity-25 justify-center items-center rounded-xl m-6 z-10">
             <div className="flex flex-col rounded-xl bg-custom-light-gray bg-opacity-25 drop-shadow-2xl w-[100%] h-[100%] overflow-y-auto p-6 custom-scrollbar">
               <Link href="/Dienstplan">
@@ -48,7 +48,7 @@ const Dashboard = () => {
                   Dienstplan
                 </h2>
               </Link>
-              <div className="flex flex-col space-y-2 p-2">
+              <div className="flex flex-col space-y-2 ">
                 <p className="text-lg font-lato mb-4 text-black">06-05-2024</p>
                 <div className="flex flex-col space-y-2">
                   {schedule.map((item, i) => (
