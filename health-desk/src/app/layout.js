@@ -1,5 +1,5 @@
 "use client"
-import store from './aufnahme/state/store';
+import store from './Aufnahme/state/store';
 import Navbar from './components/Navbar';
 import './globals.css';
 import WaveBackground from './components/WaveBackground';

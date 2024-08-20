@@ -22,7 +22,7 @@ const Step4 = () => {
       onSubmit={(values) => {
         const patientId = 1; // Verwende die tatsächliche patientId, die du zuordnen möchtest
         dispatch(saveStep4Data({ ...values, patientId }));
-        router.push('/aufnahme/step5');
+        router.push('/Aufnahme/step5');
       }}
     >
       {() => (

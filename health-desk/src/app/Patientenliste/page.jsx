@@ -74,7 +74,7 @@ const PatientenListe = () => {
             </button>
           </div>
           <div className="flex">
-            <Link href="/step1" className='flex m-4'>
+            <Link href="/Aufnahme" className='flex m-4'>
               <button>
                 <CiCirclePlus className='w-6 h-6 opacity-40 transition transform hover:opacity-70 duration-200' />
               </button>

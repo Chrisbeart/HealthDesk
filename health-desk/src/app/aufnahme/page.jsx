@@ -33,7 +33,7 @@ const Step1 = () => {
       initialValues={initialValues}
       onSubmit={(values) => {
         dispatch(saveStep1Data(values));
-        router.push('/aufnahme/step2');  // Navigiere zu Step2 nach Einreichung des Formulars
+        router.push('/Aufnahme/step2');  // Navigiere zu Step2 nach Einreichung des Formulars
       }}
     >
       {() => (
