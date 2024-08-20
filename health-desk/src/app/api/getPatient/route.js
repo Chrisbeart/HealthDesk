@@ -13,17 +13,18 @@ export async function GET(request) {
     const connection = await getMySQLConnection();
 
     // Fetch the patient data based on the ID
-    const [patientRows] = await connection.query(`
+    const [patients] = await connection.query(`
       SELECT id, vorname, nachname, geburtsdatum, geschlecht, nationalitaet, adresse, plz, stadt, land, telefon, email, versicherungsnummer, notfallkontakt, notfalltelefon, zimmernummer
       FROM patients
       WHERE id = ?
     `, [patientId]);
 
-    if (patientRows.length === 0) {
+    // Check if any patient was found
+    if (patients.length === 0) {
       return NextResponse.json({ message: 'Patient not found' }, { status: 404 });
     }
 
-    const patient = patientRows[0];
+    const patient = patients[0];
 
     await connection.end();
 

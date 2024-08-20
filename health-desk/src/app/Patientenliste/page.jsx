@@ -1,22 +1,16 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import PatientItem from '../components/PatientItem';
 import { CiFilter, CiCirclePlus } from "react-icons/ci";
 import Link from 'next/link';
-
-const PatientItemSkeleton = () => {
-  return (
-    <div className="p-4 bg-gray-200 rounded-lg shadow animate-pulse">
-      {/* Skeleton loading UI */}
-    </div>
-  );
-};
 
 const PatientenListe = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -26,7 +20,7 @@ const PatientenListe = () => {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        setPatients(data);
+        setPatients(data); // Assuming data is an array of patients
         setLoading(false);
       } catch (error) {
         console.error('Error fetching patient data:', error);
@@ -38,12 +32,12 @@ const PatientenListe = () => {
     fetchPatients();
   }, []);
 
+  const handlePatientClick = (patientId) => {
+    router.push(`/patientenProfil?id=${patientId}`);
+  };
+
   if (loading) {
-    return (
-      <div className="container mx-auto p-6">
-        {/* Loading UI */}
-      </div>
-    );
+    return <div>Loading...</div>;
   }
 
   if (error) {
@@ -72,7 +66,7 @@ const PatientenListe = () => {
       </div>
       <div className="space-y-4">
         {patients.map((patient) => (
-          <PatientItem key={patient.id} patient={patient} />
+          <PatientItem key={patient.id} patient={patient} onClick={() => handlePatientClick(patient.id)} />
         ))}
       </div>
     </div>

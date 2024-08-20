@@ -9,6 +9,7 @@ const PatientItem = ({ patient }) => {
 
   const handleProfileClick = (event) => {
     event.stopPropagation();
+    // Passing patient data as state to the profile page
     router.push(`/PatientenProfil/${patient.id}`);
   };
 
@@ -24,10 +25,21 @@ const PatientItem = ({ patient }) => {
           </div>
           <div className='flex items-center w-full'>
             <div className="flex items-center justify-around w-full rounded-xl bg-opacity-40 h-10">
-              <p className="font-lato text-lg text-black leading-6"><span className="text-xl font-lato mb-2 text-custom-dark-gray">Vorname:</span> <br/>  {patient.vorname}</p>
-              <p className="font-lato text-lg text-black leading-6"><span className="text-xl font-lato mb-2 text-custom-dark-gray">Nachname:</span> <br/>  {patient.nachname}</p>
-              <p className="font-lato text-lg text-black leading-6"><span className="text-xl font-lato mb-2 text-custom-dark-gray">Zimmernummer:</span> <br/>  {patient.zimmernummer}</p>
-              <p className="font-lato text-lg text-black leading-6"><span className="text-xl font-lato mb-2 text-custom-dark-gray">Geburtsdatum:</span> <br/>  {new Date(patient.geburtsdatum).getFullYear()}</p>
+              <p className="font-lato text-lg text-black leading-6">
+                <span className="text-xl font-lato mb-2 text-custom-dark-gray">ID:</span> <br/> {patient.id}
+              </p>
+              <p className="font-lato text-lg text-black leading-6">
+                <span className="text-xl font-lato mb-2 text-custom-dark-gray">Vorname:</span> <br/>  {patient.vorname}
+              </p>
+              <p className="font-lato text-lg text-black leading-6">
+                <span className="text-xl font-lato mb-2 text-custom-dark-gray">Nachname:</span> <br/>  {patient.nachname}
+              </p>
+              <p className="font-lato text-lg text-black leading-6">
+                <span className="text-xl font-lato mb-2 text-custom-dark-gray">Zimmernummer:</span> <br/>  {patient.zimmernummer}
+              </p>
+              <p className="font-lato text-lg text-black leading-6">
+                <span className="text-xl font-lato mb-2 text-custom-dark-gray">Geburtsdatum:</span> <br/>  {new Date(patient.geburtsdatum).getFullYear()}
+              </p>
             </div>
           </div>
         </div>
