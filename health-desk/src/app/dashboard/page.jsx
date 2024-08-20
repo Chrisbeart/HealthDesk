@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import WaveBackground from '../components/backgrounds/WaveBackground';
+
 
 const Dashboard = () => {
   const schedule = [
@@ -26,23 +26,19 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="relative w-full h-full">
-      {/* Hintergrundwellen */}
-      <WaveBackground />
-
-      <div className="flex flex-col w-full h-full px-6 py-12 justify-center items-center rounded-xl z-20"
-        data-aos="fade-zoom-in"
-        data-aos-easing="ease-in-out"
-        data-aos-duration="1000"
-        data-aos-once="true">
-        
-        <div className="flex w-full h-full px-8 my-6 justify-start">
-          <Link href="/Mitarbeiterprofil/1">
-            <h1 className="text-5xl font-fjalla tracking-wide hover:cursor-pointer hover:text-custom-dark-gray z-20">
-              Albert Doluk
-            </h1>
-          </Link>
-        </div>
+    <div className="flex flex-col w-full h-full px-6 py-12 justify-center items-center rounded-xl z-20"
+      data-aos="fade-zoom-in"
+      data-aos-easing="ease-in-out"
+      data-aos-duration="1000"
+      data-aos-once="true">
+      
+      <div className="flex w-full h-full px-8 my-6 justify-start">
+        <Link href="/Mitarbeiterprofil/1">
+          <h1 className="text-5xl font-fjalla tracking-wide hover:cursor-pointer hover:text-custom-dark-gray z-20">
+            Albert Doluk
+          </h1>
+        </Link>
+      </div>
 
         <div className="flex w-full h-full">
           <div className="flex flex-col w-[40%] h-[93%] bg-custom-light-gray bg-opacity-25 justify-center items-center rounded-xl m-6 z-10">
@@ -95,7 +91,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    
   );
 };
 

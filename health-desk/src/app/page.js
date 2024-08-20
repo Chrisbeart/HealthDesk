@@ -1,5 +1,4 @@
-import Navbar from './components/navbar/Navbar'; // Aktualisierter Pfad
-import WaveBackground from './components/backgrounds/WaveBackground';
+import WaveBackground from "./components/WaveBackground";
 
 export default function Home() {
   return (
