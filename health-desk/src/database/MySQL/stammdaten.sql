@@ -79,3 +79,14 @@ CREATE TABLE IF NOT EXISTS evaluation (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (patientId) REFERENCES patients(id)
 );
+
+CREATE TABLE IF NOT EXISTS health_status (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    patientId INT,
+    currentHealthStatus TEXT,
+    medicalHistory TEXT,
+    allergies TEXT,
+    medications TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (patientId) REFERENCES patients(id) ON DELETE CASCADE
+);
