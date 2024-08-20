@@ -31,78 +31,90 @@ export const signUp = async (req) => {
 
 
 
-export const confirmSignUp = async (req, res) => {
+export const confirmSignUp = async (req) => {
   try {
-    console.log('Received Request Body for confirmSignUp:', req.body);
-    const { username, code } = req.body;
+    const { username, code } = await req.json();
 
     if (!username || !code) {
-      console.log('Validation Error: Username and code are required');
-      return res.status(400).json({ error: 'Username and code are required' });
+      return new Response(JSON.stringify({ error: 'Username and code are required' }), { status: 400 });
     }
 
     const result = await authService.confirmSignUp(username, code);
-    console.log('ConfirmSignUp successful, returning result:', result);
-    res.status(200).json(result);
+    return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
-    console.error('ConfirmSignUp Error:', error); // Detaillierte Fehlerprotokollierung
-    res.status(500).json({ error: error.message });
+    console.error('ConfirmSignUp Error:', error);
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 };
 
-export const signIn = async (req, res) => {
+
+export const signIn = async (body) => {
   try {
-    console.log('Received Request Body for signIn:', req.body);
-    const { username, password } = req.body;
+    console.log('Received Request Body for signIn:', body);
+    const { username, password } = body;
 
     if (!username || !password) {
       console.log('Validation Error: Username and password are required');
-      return res.status(400).json({ error: 'Username and password are required' });
+      return new Response(JSON.stringify({ error: 'Username and password are required' }), { status: 400 });
     }
 
     const result = await authService.signIn(username, password);
     console.log('SignIn successful, returning result:', result);
-    res.status(200).json(result);
+    return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
     console.error('SignIn Error:', error); // Detaillierte Fehlerprotokollierung
-    res.status(500).json({ error: error.message });
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 };
 
-export const forgotPassword = async (req, res) => {
-  try {
-    console.log('Received Request Body for forgotPassword:', req.body);
-    const { username } = req.body;
 
-    if (!username) {
-      console.log('Validation Error: Username is required');
-      return res.status(400).json({ error: 'Username is required' });
+export const forgotPassword = async (req) => {
+  try {
+    const { email } = await req.json();
+
+    if (!email) {
+      return new Response(JSON.stringify({ error: 'Email is required' }), { status: 400 });
     }
 
-    const result = await authService.forgotPassword(username);
-    console.log('ForgotPassword successful, returning result:', result);
-    res.status(200).json(result);
+    const result = await authService.forgotPassword(email);
+    return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
-    console.error('ForgotPassword Error:', error); // Detaillierte Fehlerprotokollierung
-    res.status(500).json({ error: error.message });
+    console.error('ForgotPassword Error:', error); // Protokolliert den genauen Fehler
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 };
 
-export const forgotPasswordSubmit = async (req, res) => {
-  try {
-    console.log('Received Request Body for forgotPasswordSubmit:', req.body);
-    const { username, code, newPassword } = req.body;
 
-    if (!username || !code || !newPassword) {
-      console.log('Validation Error: Username, code, and newPassword are required');
-      return res.status(400).json({ error: 'Username, code, and newPassword are required' });
+
+export const forgotPasswordSubmit = async (req) => {
+  try {
+    const { email, code, newPassword } = await req.json();
+
+    if (!email || !code || !newPassword) {
+      return new Response(JSON.stringify({ error: 'Email, verification code, and new password are required' }), { status: 400 });
     }
 
-    const result = await authService.forgotPasswordSubmit(username, code, newPassword);
-    console.log('ForgotPasswordSubmit successful, returning result:', result);
-    res.status(200).json(result);
+    const result = await authService.forgotPasswordSubmit(email, code, newPassword);
+    return new Response(JSON.stringify(result), { status: 200 });
   } catch (error) {
-    console.error('ForgotPasswordSubmit Error:', error); // Detaillierte Fehlerprotokollierung
-    res.status(500).json({ error: error.message });
+    console.error('ForgotPasswordSubmit Error:', error);
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  }
+};
+
+
+export const getUserAttributes = async (req) => {
+  try {
+    const { accessToken } = req.body;  // Stelle sicher, dass das AccessToken korrekt übergeben wird
+
+    if (!accessToken) {
+      return new Response(JSON.stringify({ error: 'AccessToken is required' }), { status: 400 });
+    }
+
+    const result = await authService.getUserAttributes(accessToken);
+    return new Response(JSON.stringify(result), { status: 200 });
+  } catch (error) {
+    console.error('GetUserAttributes Error:', error);
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
 };

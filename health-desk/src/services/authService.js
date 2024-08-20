@@ -1,3 +1,5 @@
+import { AuthenticationDetails, CognitoUser } from 'amazon-cognito-identity-js';
+import { CognitoUserPool } from 'amazon-cognito-identity-js';
 import cognito from '../config/aws-config.js';
 import crypto from 'crypto';
 
@@ -58,22 +60,27 @@ const confirmSignUp = async (email, code) => {
 };
 
 const signIn = async (email, password) => {
+  if (!email || !password) {
+    throw new Error('Email and password must not be null or empty');
+  }
+
   const params = {
-    AuthFlow: 'USER_PASSWORD_AUTH',
+    AuthFlow: 'USER_PASSWORD_AUTH',  // Der Authentifizierungsfluss für Benutzername und Passwort
     ClientId: process.env.COGNITO_APP_CLIENT_ID,
-    SecretHash: getSecretHash(email),
     AuthParameters: {
       USERNAME: email,
-      PASSWORD: password
+      PASSWORD: password,
+      SECRET_HASH: getSecretHash(email),  // SecretHash wird korrekt übergeben
     }
   };
 
   try {
+    console.log('SignIn Params:', params);
     const result = await cognito.initiateAuth(params).promise();
-    console.log('SignIn Result:', result); // Log das Ergebnis
+    console.log('SignIn Result:', result);
     return result;
   } catch (error) {
-    console.error('SignIn Error:', error); // Detaillierte Fehlerprotokollierung
+    console.error('SignIn Error:', error);
     throw new Error(`Authentication failed: ${error.message}`);
   }
 };
@@ -82,42 +89,80 @@ const forgotPassword = async (email) => {
   const params = {
     ClientId: process.env.COGNITO_APP_CLIENT_ID,
     SecretHash: getSecretHash(email),
-    Username: email
+    Username: email,
   };
 
   try {
     const result = await cognito.forgotPassword(params).promise();
-    console.log('Forgot Password Result:', result); // Log das Ergebnis
+    console.log('ForgotPassword Result:', result);
     return result;
   } catch (error) {
-    console.error('ForgotPassword Error:', error); // Detaillierte Fehlerprotokollierung
-    throw new Error(`Forgot password request failed: ${error.message}`);
+    console.error('ForgotPassword Error:', error);
+    throw new Error(`Password reset request failed: ${error.message}`);
   }
 };
 
-const forgotPasswordSubmit = async (email, code, newPassword) => {
+const forgotPasswordSubmit = async (email, verificationCode, newPassword) => {
   const params = {
     ClientId: process.env.COGNITO_APP_CLIENT_ID,
     SecretHash: getSecretHash(email),
     Username: email,
-    ConfirmationCode: code,
+    ConfirmationCode: verificationCode,
     Password: newPassword
   };
 
   try {
     const result = await cognito.confirmForgotPassword(params).promise();
-    console.log('Forgot Password Submit Result:', result); // Log das Ergebnis
+    console.log('ForgotPasswordSubmit Result:', result);
     return result;
   } catch (error) {
-    console.error('ForgotPasswordSubmit Error:', error); // Detaillierte Fehlerprotokollierung
+    console.error('ForgotPasswordSubmit Error:', error);
     throw new Error(`Password reset failed: ${error.message}`);
   }
 };
+
+const getUserAttributes = async (accessToken) => {
+  const params = {
+    AccessToken: accessToken
+  };
+
+  try {
+    const result = await cognito.getUser(params).promise();
+    console.log('GetUserAttributes Result:', result);
+    return result;
+  } catch (error) {
+    console.error('GetUserAttributes Error:', error);
+    throw new Error(`Failed to get user attributes: ${error.message}`);
+  }
+};
+
+const checkIfUserExists = async (email) => {
+  const params = {
+    UserPoolId: process.env.COGNITO_USER_POOL_ID,
+    Username: email,
+  };
+
+  try {
+    const result = await cognito.adminGetUser(params).promise();
+    console.log('User exists:', result);
+    return true;
+  } catch (error) {
+    if (error.code === 'UserNotFoundException') {
+      console.log('User not found');
+      return false;
+    }
+    console.error('Error checking if user exists:', error);
+    throw new Error(`Error checking if user exists: ${error.message}`);
+  }
+};
+
 
 export default {
   signUp,
   confirmSignUp,
   signIn,
   forgotPassword,
-  forgotPasswordSubmit
+  forgotPasswordSubmit,
+  getUserAttributes,
+  checkIfUserExists
 };
