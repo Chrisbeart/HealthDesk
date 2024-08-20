@@ -20,12 +20,9 @@ export async function POST(req) {
 
     console.log('SignUp API call successful, returning response:', response);
 
-    // Prüfe, ob response.status definiert ist, andernfalls setze den Standardwert 200
-    const status = response.status || 200;
-
-    return new Response(JSON.stringify(response), { status: status });
+    return new Response(JSON.stringify(response), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error('Signup API Error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }

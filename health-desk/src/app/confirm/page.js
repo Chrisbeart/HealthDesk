@@ -1,7 +1,8 @@
 "use client"; // Macht die Datei zu einer Client-Komponente
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const ConfirmPage = () => {
   const [form, setForm] = useState({
@@ -26,7 +27,7 @@ const ConfirmPage = () => {
       });
 
       // API-Aufruf zur Bestätigung der Anmeldung
-      const response = await axios.post('/api/confirm-signup', { // Verwende relativen Pfad
+      const response = await axios.post('/api/confirm', { // Verwende relativen Pfad
         username: form.email,
         code: form.code,
       });
